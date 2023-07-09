@@ -1,0 +1,32 @@
+#include<iostream>
+#include<bits/stdc++.h>
+ 
+#include<string>
+using namespace std;
+int main(){
+     
+ int a[4];
+ int counter=0;
+ for(int i=0;i<4;i++){
+     cin>>a[i];
+ }
+ sort (a,a+4);
+ 
+ for(int i=0;i<4;i++){
+     
+           if(a[i]!=a[i+1]){
+counter++;
+           }
+           
+      }
+      
+ 
+           
+      
+ 
+ cout<<4-counter;
+ 
+ 
+ 
+ return 0;  
+}
