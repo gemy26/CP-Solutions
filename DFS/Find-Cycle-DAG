@@ -1,0 +1,138 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+
+#define ll long long
+#define pii pair<int,int>
+#define pll pair<ll,ll>
+#define pb push_back
+#define  el '\n'
+#define all(x) x.begin(),x.end()
+ll mod = 1e9+7;
+const ll INF = 0x3f3f3f3f3f3f3f3f;
+const int N = 1e5+2;
+
+bool cmp(const pair<int, int>& a,const pair<int, int>& b){
+    if(a.first == b.first)
+        return a.second > b.second;
+
+    return a.first < b.first;
+}
+
+
+//bool cmp(const string& a,const string& b){return a+b < b+a;}
+
+
+int dx[] = {1, -1, 0, 0, -1, -1, 1, 1};
+int dy[] = {0, 0, 1, -1, -1, 1, 1, -1};
+const char dc[4]={'U','R','D','L'};
+#define HereWeGo() ios::sync_with_stdio(0),cin.tie(nullptr),cout.tie(nullptr);
+
+
+
+    vector<vector<int>>G(N);
+    vector<bool>vis(N,false);
+    vector<int>parent(N);
+    vector<int>res;
+    bool f = false;
+
+void DFS(int node, int par  = 999999){
+    vis[node] = true;
+    parent[node] = par;
+    for(auto i : G[node]){
+
+        if(parent[i] > 0 && !f){
+            int old = node;
+            f = true;
+            while(node ^ i) {
+                res.pb(node);
+                node = parent[node];
+            }
+            res.pb(i);
+            break;
+        }
+        if( parent[i] == 0){
+            DFS(i,node);
+        }
+    }
+    parent[node] = -1;
+}
+
+
+
+void RunCase() {
+
+
+int n,m;
+cin >> n >> m;
+    for (int i = 0; i < m ; ++i) {
+        int u,v;
+        cin >> u >> v;
+        G[u].pb(v);
+//        G[v].pb(u);
+    }
+
+    for (int i = 1; i <= n ; ++i) {
+        if(!vis[i]){
+        DFS(i);
+            }
+    }
+if(f){
+    cout<<"YES\n";
+    reverse(all(res));
+    for(auto i : res)cout<<i<<" ";
+}
+else{
+    cout<<"NO\n";
+
+}
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int main(){
+    HereWeGo();
+//    freopen("moocast.in", "r", stdin);
+//    freopen("moocast.out", "w", stdout);
+
+    int t = 1;
+//    cin >> t;
+
+
+    for (int i = 0; i < t; ++i)
+    {
+        //cout<<"Case #:"<<i+1<<el;
+
+        RunCase();
+
+
+    }
+    return 0;
+
+}
