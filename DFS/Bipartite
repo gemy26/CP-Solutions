@@ -1,0 +1,27 @@
+bool bipartite(int n){ // nodes
+    vector<int>sides(N,-1);
+    bool is_bipartite = true;
+    queue<int>q;
+    for(int i = 1 ; i <= n ; i++){
+        if(sides[i] == -1){
+            q.push(i);
+            sides[i] = 0;
+            while(!q.empty()){
+                int node = q.front();
+                for(auto child : G[node] ){
+                    if(sides[child] == -1){
+                        sides[child] = sides[node]^1;
+                        q.push(child);
+                    }
+                    else{
+                        is_bipartite &= sides[node] != sides[child];
+                    }
+                }
+
+            }
+
+        }
+    }
+    
+    return is_bipartite;
+}
