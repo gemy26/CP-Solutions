@@ -1,0 +1,165 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define pii pair<int,int>
+#define pll pair<ll,ll>
+#define pb push_back
+#define  el '\n'
+#define all(x) x.begin(),x.end()
+ll mod = 1e9+7;
+//const ll INF = 0x3f3f3f3f3f3f3f3f;
+const int INF = 1e9;
+const int N = 1005;
+
+bool cmp(const pair<int, int>& a,const pair<int, int>& b){
+    if(a.first == b.first)
+        return a.second > b.second;
+
+    return a.first < b.first;
+}
+
+
+//bool cmp(const string& a,const string& b){return a+b < b+a;}
+
+
+//int dx[] = {1, -1, 0, 0, -1, -1, 1, 1};
+//int dy[] = {0, 0, 1, -1, -1, 1, 1, -1};
+
+int dx[4] = {0, 0, 1, -1};
+int dy[4] = {1, -1, 0, 0};
+
+//int dx[] = {-2, -2, 2, 2, -1, -1, 1, 1};
+//int dy[] = {-1, 1, 1, -1, -2, 2, -2, 2};
+
+const char dc[4]={'U','R','D','L'};
+#define HereWeGo() ios::sync_with_stdio(0),cin.tie(nullptr),cout.tie(nullptr);
+
+
+
+void RunCase() {
+
+    int n,m,sx,sy;
+    cin >> n >> m;
+    vector<string>G(n);
+    vector<vector<int>>dis_monster(n,vector<int>(m,INF));
+    vector<vector<int>>dis_operator(n,vector<int>(m,INF));
+    vector<vector<pair<pair<int,int>,char>>>parent(n, vector<pair<pair<int, int>, char>>(m));
+    string path = "";
+
+    queue<pii>q_monster;
+    queue<pii>q_operator;
+
+    for (int i = 0; i < n ; ++i) {
+        cin >> G[i];
+    }
+
+
+    for (int i = 0; i < n ; ++i) {
+        for (int j = 0; j < m ; ++j) {
+            if(G[i][j] == 'M'){
+                q_monster.push({i,j});
+                dis_monster[i][j] = 0;
+            }
+            if(G[i][j] == 'A'){
+                q_operator.push({i,j});
+                dis_operator[i][j] = 0;
+                sx = i, sy = j;
+            }
+        }
+    }
+
+    while(!q_monster.empty()){
+        int x = q_monster.front().first;
+        int y = q_monster.front().second;
+        q_monster.pop();
+        int cs = dis_monster[x][y];
+
+        for (int i = 0; i < 4 ; ++i) {
+            int nx = dx[i]+x;
+            int ny = dy[i]+y;
+
+            if(nx >= 0 && ny >= 0 && nx < n && ny < m && G[nx][ny] != '#' ){
+                if(dis_monster[nx][ny] > cs+1) { dis_monster[nx][ny] = 1 + cs; q_monster.push({nx,ny});}
+            }
+        }
+    }
+
+    while(!q_operator.empty()){
+        int x = q_operator.front().first;
+        int y = q_operator.front().second;
+        q_operator.pop();
+        int cs = dis_operator[x][y];
+
+        if(x == 0 || y == 0 || x == n-1 || y == m-1){
+            //construct path
+            pii next = {x,y};
+            pii start = {sx,sy};
+            while (next != start){
+                path += parent[next.first][next.second].second;
+                next = parent[next.first][next.second].first;
+            }
+            cout<<"YES\n";
+            cout<<dis_operator[x][y]<<el;
+            reverse(all(path));
+            cout<<path<<el;
+
+            return;
+        }
+
+        for (int i = 0; i < 4 ; ++i) {
+            int nx = dx[i]+x;
+            int ny = dy[i]+y;
+
+            if(nx >= 0 && ny >= 0 && nx < n && ny < m && G[nx][ny] != '#' ){
+                if(dis_monster[nx][ny] <=  cs+1) continue;
+                if(dis_operator[nx][ny] > cs+1) {
+                    dis_operator[nx][ny] = 1 + cs;
+                    q_operator.push({nx,ny});
+                    if(dx[i] == 0 && dy[i] == 1){
+                        parent[nx][ny] = {{x,y},'R'};
+                    }
+                    else if(dx[i] == 1 && dy[i] == 0){
+                        parent[nx][ny] = {{x,y},'D'};
+                    }
+                    else if(dx[i] == -1 && dy[i] == 0){
+                        parent[nx][ny] = {{x,y},'U'};
+                    }
+
+                    else if(dx[i] == 0 && dy[i] == -1){
+                        parent[nx][ny] = {{x,y},'L'};
+                    }
+
+                }
+            }
+        }
+    }
+    
+
+cout<<"NO\n";
+
+
+
+
+}
+
+int main(){
+    HereWeGo();
+//    freopen("moocast.in", "r", stdin);
+//    freopen("moocast.out", "w", stdout);
+
+    int t = 1;
+//    cin >> t;
+
+    for (int i = 0; i < t; ++i)
+    {
+//        cout<<"Case #"<<i+1<<": ";
+
+        RunCase();
+
+
+
+    }
+    return 0;
+
+}
